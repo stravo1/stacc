@@ -13,7 +13,7 @@ function SideNav(props) {
 
   useEffect(() => {
     //console.log(location.pathname)
-    if(location.pathname === "/"){
+    if(location.pathname === "/" || location.pathname === "/stacc"){
       setActive("daily")
     }
     else{

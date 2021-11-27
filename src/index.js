@@ -35,6 +35,10 @@ ReactDOM.render(
               element={<Stacc title="daily" actions={d_actions} />}
             />
             <Route
+              path="stacc"
+              element={<Stacc title="daily" actions={d_actions} />}
+            />
+            <Route
               path="daily"
               element={<Stacc title="daily" actions={d_actions} />}
             />

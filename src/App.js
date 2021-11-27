@@ -138,7 +138,7 @@ function App() {
             top: 0,
             zIndex: 999,
             background: "rgba(14, 18, 25)",
-            paddingBottom: "0.75rem",
+            paddingBottom: "1.5rem",
           }}
         >
           <Grid fluid>
@@ -202,7 +202,7 @@ function App() {
           style={{
             position: "relative",
             textAlign: "",
-            top: "16vh",
+            top: "6.5rem",
             height: "80vh",
           }}
         >

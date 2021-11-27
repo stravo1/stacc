@@ -185,7 +185,7 @@ function Stacc(props) {
         style={{
           background: "rgba(14, 18, 25)",
           position: "sticky",
-          top: "8vh",
+          top: "4rem",
           zIndex: "995",
           paddingBottom: "0.75rem",
         }}
@@ -314,9 +314,24 @@ function Stacc(props) {
                 }}
               />
             </Form.Group>
+
+            <Form.Group controlId="desc">
+              <Form.ControlLabel>Desciption</Form.ControlLabel>
+              <Input
+                as="textarea"
+                rows={3}
+                placeholder="Textarea"
+                value={f_desc}
+                onChange={(value, event) => {
+                  setDescription(value);
+                }}
+              />
+            </Form.Group>
             <Form.Group controlId="subtasks">
               <Form.ControlLabel>Subtasks</Form.ControlLabel>
+              <div>
               <TagInput
+                trigger={["Enter","Comma"]}
                 value={Object.keys(f_subtasks)}
                 style={{ width: 300 }}
                 placeholder="Add subtasks"
@@ -343,19 +358,8 @@ function Stacc(props) {
                   setSubtasks(temp_obj);
                 }}
               />
-            </Form.Group>
-
-            <Form.Group controlId="desc">
-              <Form.ControlLabel>Desciption</Form.ControlLabel>
-              <Input
-                as="textarea"
-                rows={3}
-                placeholder="Textarea"
-                value={f_desc}
-                onChange={(value, event) => {
-                  setDescription(value);
-                }}
-              />
+              </div>
+              <Form.HelpText>Press enter to separate subtasks</Form.HelpText>
             </Form.Group>
             <Form.Group>
               <ButtonToolbar>
@@ -363,13 +367,14 @@ function Stacc(props) {
                   appearance="primary"
                   onClick={() => (action == "Add" ? handleAdd() : handleEdit())}
                 >
-                  Submit
+                  Save
                 </Button>
                 <Button appearance="default" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
               </ButtonToolbar>
             </Form.Group>
+            
           </Form>
         </Drawer.Body>
       </Drawer>
