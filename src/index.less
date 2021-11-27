@@ -1,0 +1,186 @@
+@import "~rsuite/dist/rsuite.min.css";
+@import "~rsuite/styles/index.less";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap");
+//@import "../node_modules/rsuite/dist/rsuite.min.css";
+//@enable-dark-mode: true;
+@red-dark: #f4815d;
+@green-dark: #4ceed0;
+@blue-dark: #00d5fc;
+@yellow-dark: #f2bf06;
+@violet-dark: #bb99ff;
+@red: @red-dark;
+@yellow: @yellow-dark;
+@blue: @blue-dark;
+@green: @green-dark;
+@violet: @violet-dark;
+@font-family-base: Poppins, "Lucida Grande", "Avenir Next", "Helvetica Neue",
+  Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  STXihei, sans-serif;
+@border-radius: 1rem;
+html, body{
+  margin: 0;
+  height: 100%;
+}
+.rs-panel {
+  border-radius: 1rem;
+}
+.rs-carousel{
+  height: 200px;
+  border-radius: 1rem;
+}
+.icons {
+  font-size: 2em;
+  color: black;
+}
+.rs-drawer-left.rs-drawer-xs,
+.rs-drawer-right.rs-drawer-xs {
+  width: 200px;
+}
+.rs-modal-content {
+  position: relative;
+  top: 8vh;
+}
+.rs-drawer-content {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+.rs-progress-line {
+  padding: 5px 0px;
+}
+.rs-modal-full {
+  width: calc(100% - 60px);
+}
+
+.greenModal .rs-modal-content {
+  background-color: @green;
+}
+.yellowModal .rs-modal-content {
+  background-color: @yellow;
+}
+.redModal .rs-modal-content {
+  background-color: @red;
+}
+.blueModal .rs-modal-content {
+  background-color: @blue;
+}
+.violetModal .rs-modal-content {
+  background-color: @violet;
+}
+.modalDesc .noContent {
+  margin-top: 0.5rem;
+  padding-bottom: 1rem;
+  height: 8rem;
+  font-weight: 600;
+  
+}
+.modalDesc .content {
+  margin-top: 0.5rem;
+  padding-bottom: 1rem;
+  height: 7.5rem;
+  overflow: scroll;
+}
+.modalSubtasks {
+  margin-top: 1rem;
+}
+.modalSubtasks .content {
+  margin-top: 1rem;
+  height: 8.5rem;
+  overflow: scroll;
+}
+
+.modalSubtasks .noContent {
+  height: 8.5rem;
+  overflow: scroll;
+  font-weight: 600;
+}
+
+.drawerBodyCustom {
+  margin-top: 5rem;
+}
+.linkNavItem {
+  position: absolute;
+  top: 0.5rem;
+  left: 2.5rem;
+}
+.sideNavList,
+.sideNavOthers {
+  margin: 1rem;
+  color: #f4815d;
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 0.75rem;
+}
+.list,
+.others {
+  margin: 1rem;
+  display: grid;
+  grid-template-rows: 1.5fr 1.5fr 1.5fr;
+  font-size: large;
+}
+.sideNav .rs-drawer-content{
+  border-radius: 0;
+}
+
+.footerAdd{
+  position: fixed;
+  bottom: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(3, 3, 3));
+  width: 100vw;
+  height: 4.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.staccTabs .rs-nav-item{
+  border-radius: 10rem;
+  text-align: center;
+  margin: 0 1rem;
+  font-weight: 500;
+}
+.staccTabs .rs-nav-item-active{
+  color: #3c3c3c;
+  background-color: whitesmoke;
+}
+.staccTabs .rs-nav-default .rs-nav-item:hover, .rs-nav-default .rs-nav-item:focus{
+  background-color: whitesmoke;
+}
+
+.carouselItem{
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.fade-in {
+  animation: fadeIn linear 0.25s;
+  -webkit-animation: fadeIn linear 0.25s;
+  -moz-animation: fadeIn linear 0.25s;
+  -o-animation: fadeIn linear 0.25s;
+  -ms-animation: fadeIn linear 0.25s;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0.5;;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0.5;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0.5;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0.5;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0.5;}
+  100% {opacity:1;}
+}
