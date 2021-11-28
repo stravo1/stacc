@@ -1,29 +1,22 @@
 import React, { useState } from "react";
 import {
   Panel,
-  Checkbox,
-  Button,
-  ButtonToolbar,
   Tag,
   TagGroup,
   Col,
-  Progress,
 } from "rsuite";
-import { IoMdTrash } from "react-icons/io";
+
 import {
-  RiCheckboxBlankCircleFill,
   RiCheckboxBlankCircleLine,
   RiCheckboxCircleFill,
-  RiCheckboxCircleLine,
   RiCheckDoubleFill,
   RiDeleteBin6Line,
-  RiEdit2Fill,
   RiListCheck2,
 } from "react-icons/ri";
-import { BiEdit, BiMessageSquareEdit } from "react-icons/bi";
+import { BiMessageSquareEdit } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import TaskModal from "./TaskModal";
-import { colorMap } from "../assets/js/lists";
+import { borderColorMap, colorMap } from "../assets/js/lists";
 
 
 function ListMember(props) {
@@ -67,14 +60,13 @@ function ListMember(props) {
         >
           <BiMessageSquareEdit />
         </div>
-
-        <TagGroup>
+        <TagGroup className="customScroll" style={{width:"90%", overflow:"scroll", whiteSpace:"nowrap"}}>
           {props.task.tags.map((tag) => (
             <Tag
               size="md"
               color={props.task.color}
               style={{
-                borderColor: "rgb(168, 85, 85)",
+                borderColor: borderColorMap[props.task.color],
                 borderWidth: "1.5px",
                 color: "black",
                 borderStyle: "solid",
@@ -141,7 +133,7 @@ function ListMember(props) {
           }}
           //onClick={() => props.handleOpen(props.task)}
         >
-          {props.task.progress == 1 ? (
+          {props.task.progress === 1 ? (
             <RiCheckboxCircleFill onClick={() => handleCheck(0)} />
           ) : (
             <RiCheckboxBlankCircleLine onClick={() => handleCheck(1)} />

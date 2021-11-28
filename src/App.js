@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
-import { Container, Header, Content, Footer, Grid, Row, Col } from "rsuite";
+import { Outlet } from "react-router-dom";
+import { Container, Header, Content, Grid, Row, Col } from "rsuite";
 import SideNav from "./components/SideNav";
 import { gapi } from "gapi-script";
 import checkInstall from "./assets/js/installHandler";
@@ -14,7 +14,6 @@ import {
 } from "./store/slices/generalSlice";
 import { RiAppsLine } from "react-icons/ri";
 import { FiUploadCloud } from "react-icons/fi";
-import { AiOutlineSync } from "react-icons/ai";
 import { uploadFiles } from "./assets/js/requestHandler";
 
 var CLIENT_ID =
@@ -36,7 +35,7 @@ function App() {
   useEffect(() => {
     //equivalent to componentDidMount
     if (!loaded) {
-      var callback = console.log;
+
       gapi.load("client:auth2", function () {
         ////console.log(108)
         gapi.client

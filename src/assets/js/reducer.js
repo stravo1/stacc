@@ -1,5 +1,3 @@
-import { act } from "react-dom/cjs/react-dom-test-utils.development";
-
 var reducers = {
   setTasks(state, actions) {
     state.tasks = actions.payload.tasks;
@@ -19,11 +17,11 @@ var reducers = {
   editTask(state, action) {
     state.tasks.map((task) => {
       if (task.id == action.payload.id) {
-        if (action.payload["progress"] == "calculate") { //bodge1
+        if (action.payload["progress"] === "calculate") { //bodge1
           //bodge1
           var done = 0;
           Object.keys(action.payload.subtasks).map((subtask) =>
-            action.payload.subtasks[subtask] == 1 ? (done += 1) : ""
+            action.payload.subtasks[subtask] === 1 ? (done += 1) : ""
           );
           action.payload["progress"] =
             done /

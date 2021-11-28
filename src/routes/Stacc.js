@@ -221,7 +221,7 @@ function Stacc(props) {
       </div>
       <br />
       <Row style={{ margin: "1rem" }}>
-        { (active == "completed" && !checked.length) || (active != "completed" && !ongoing.length) ? <div style={{width: "90vw", display:"flex", justifyContent:"center"}}><img style={{height:"35vh"}} src={kitty} /> </div> : "" }
+        { (active == "completed" && !checked.length) || (active != "completed" && !ongoing.length) ? <div style={{width: "90vw", display:"flex", justifyContent:"center"}}><img style={{height:"35vh"}} src={kitty} alt="No tasks!" /> </div> : "" }
         {ongoing.map((post) => (
           <div
             style={
@@ -310,8 +310,10 @@ function Stacc(props) {
                 groupBy="categories"
                 placeholder="Add tags"
                 onChange={(value, event) => {
+                  if(value == null) value = []
                   setTags(value);
                 }}
+                trigger="Comma"
               />
             </Form.Group>
 

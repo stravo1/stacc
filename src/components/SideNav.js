@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Nav, Button } from "rsuite";
+import { Drawer, Nav } from "rsuite";
 import { Link, useLocation } from "react-router-dom";
 import {FiTriangle} from "react-icons/fi"
 import {BiCircle, BiSquareRounded} from "react-icons/bi"
-import { RiInformationLine, RiListCheck2, RiSettingsLine } from "react-icons/ri";
+import { RiInformationLine, RiSettingsLine } from "react-icons/ri";
 
 function SideNav(props) {
 

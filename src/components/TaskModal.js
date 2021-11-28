@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Button, Checkbox, Placeholder } from "rsuite";
 import { useDispatch } from "react-redux";
-import { RiQuestionLine } from "react-icons/ri";
 
 function TaskModal(props) {
   const { Paragraph } = Placeholder; 
