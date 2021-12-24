@@ -8,11 +8,12 @@ const weeklySlice = createSlice({
   reducers: reducers,
 });
 
-const { addTask, deleteTask, editTask, setTasks } = weeklySlice.actions;
+const { addTask, deleteTask, editTask, setTasks, updateTime } = weeklySlice.actions;
 export const actions = {
   set: setTasks,
   add: addTask,
   edit: editTask,
   delete: deleteTask,
+  updateTime: updateTime,
 };
 export default weeklySlice.reducer;

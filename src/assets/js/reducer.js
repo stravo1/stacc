@@ -35,6 +35,10 @@ var reducers = {
     });
     state.time = new Date().getTime();
   },
+  updateTime(state){
+    console.log("time refeshed")
+    state.time = new Date().getTime();
+  },
 };
 
 export default reducers;

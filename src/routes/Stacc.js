@@ -18,7 +18,7 @@ import {
   changeStaccLoaded,
   changeStaccSyncStat,
 } from "../store/slices/generalSlice";
-import kitty from "../assets/svg/kitty.svg"
+import kitty from "../assets/svg/kitty.svg";
 import initialState from "../assets/js/initialStateMaker";
 import { titleMap } from "../assets/js/lists";
 import { getFileContent, uploadFiles } from "../assets/js/requestHandler";
@@ -81,37 +81,88 @@ function Stacc(props) {
       );
     }
     //equivalent to componentDidMount
-    if (!stacc_synced && fileId != 0) {
+    if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
       console.log("Only once: " + props.title);
       var resp = await getFileContent(accessToken, fileId);
-      console.log(resp)
+      console.log(resp);
       var c_time = JSON.parse(resp).time;
+      console.log(c_time, time, c_time > time);
       if (c_time > time) {
-        var x = window.confirm("There are newer " + props.title + " tasks available, replace current ones?");
+        var x = window.confirm(
+          "There are newer " +
+            props.title +
+            " tasks available, replace current ones?"
+        );
         if (x) {
           dispatch(props.actions.set(JSON.parse(resp)));
           localStorage.setItem(props.title, resp);
-        }
-        else{
-          handleSync()
+        } else {
+          handleSync();
         }
       } else {
         console.log("uploading current");
         handleSync();
       }
       dispatch(changeStaccSyncStat({ list: props.title, value: 1 }));
+      checkAutoTrash(time);
     }
   });
+
+  function checkAutoTrash(time) {
+    var bool = false;
+    var text = ""
+    switch (props.title) {
+      case "daily":
+        bool =
+          new Date(time).getDate() - new Date().getDate() != 0 &&
+          localStorage.getItem("autoTrash") == "true";
+        text = "day"
+        break;
+      case "weekly":
+        bool =
+          new Date().getDay() == 0 &&
+          new Date(new Date(time).toString().split(" ").slice(0, 4).join(" ")).getTime() - new Date(new Date().toString().split(" ").slice(0, 4).join(" ")).getTime()!=0 &&
+          localStorage.getItem("autoTrash") == "true";
+        text = "week"
+        break;
+      case "monthly":
+        bool =
+        new Date().getDate() == 0 &&
+        new Date(new Date(time).toString().split(" ").slice(0, 4).join(" ")).getTime() - new Date(new Date().toString().split(" ").slice(0, 4).join(" ")).getTime()!=0 &&
+        localStorage.getItem("autoTrash") == "true";
+        text = "month"
+        break;
+    }
+    if (bool) {
+        var x = window.confirm("These tasks are one " + text + " old. Trash 'em?");
+        if (x) {
+          dispatch(
+            props.actions.set({ tasks: [], time: new Date().getTime() })
+          );
+          localStorage.setItem(props.title, {
+            tasks: [],
+            time: new Date().getTime(),
+          });
+          handleSync();
+        } else {
+          dispatch(props.actions.updateTime());
+          localStorage.setItem(
+            props.title,
+            JSON.stringify({ tasks: posts, time: time })
+          );
+        }
+      } else console.log("no autotrash");
+  }
 
   /* functions */
   function handleDelete(task) {
     var index = posts.indexOf(task);
-    var x = window.confirm("Are you sure?")
-    if(!x){
-      return
+    var x = window.confirm("Are you sure?");
+    if (!x) {
+      return;
     }
     dispatch(props.actions.delete(index));
-    localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(posts));
   }
 
   function handleAdd() {
@@ -131,7 +182,7 @@ function Stacc(props) {
       })
     );
     setOpen(false);
-    localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(posts));
   }
 
   function handleEdit() {
@@ -150,7 +201,7 @@ function Stacc(props) {
         progress: "calculate",
       })
     );
-    localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(posts));
     setOpen(false);
   }
 
@@ -221,7 +272,16 @@ function Stacc(props) {
       </div>
       <br />
       <Row style={{ margin: "1rem" }}>
-        { (active == "completed" && !checked.length) || (active != "completed" && !ongoing.length) ? <div style={{width: "90vw", display:"flex", justifyContent:"center"}}><img style={{height:"35vh"}} src={kitty} alt="No tasks!" /> </div> : "" }
+        {(active == "completed" && !checked.length) ||
+        (active != "completed" && !ongoing.length) ? (
+          <div
+            style={{ width: "90vw", display: "flex", justifyContent: "center" }}
+          >
+            <img style={{ height: "35vh" }} src={kitty} alt="No tasks!" />{" "}
+          </div>
+        ) : (
+          ""
+        )}
         {ongoing.map((post) => (
           <div
             style={
@@ -236,14 +296,12 @@ function Stacc(props) {
             />
           </div>
         ))}
-        {
-        checked.map((post) => (
+        {checked.map((post) => (
           <div
             style={
               active != "ongoing" ? { display: "unset" } : { display: "none" }
             }
           >
-            
             <ListMember
               task={post}
               handleDelete={(task) => handleDelete(task)}
@@ -283,6 +341,7 @@ function Stacc(props) {
                 return <div style={{ color: item.hex }}>{item.label}</div>;
               }}
               onChange={(value, event) => {
+                if (value == null) value = "green";
                 setColor(value);
               }}
             />
@@ -310,7 +369,7 @@ function Stacc(props) {
                 groupBy="categories"
                 placeholder="Add tags"
                 onChange={(value, event) => {
-                  if(value == null) value = []
+                  if (value == null) value = [];
                   setTags(value);
                 }}
                 trigger="Comma"
@@ -332,34 +391,34 @@ function Stacc(props) {
             <Form.Group controlId="subtasks">
               <Form.ControlLabel>Subtasks</Form.ControlLabel>
               <div>
-              <TagInput
-                trigger={["Enter","Comma"]}
-                value={Object.keys(f_subtasks)}
-                style={{ width: 300 }}
-                placeholder="Add subtasks"
-                /*
+                <TagInput
+                  trigger={["Enter", "Comma"]}
+                  value={Object.keys(f_subtasks)}
+                  style={{ width: 300 }}
+                  placeholder="Add subtasks"
+                  /*
                 onCreate={(value, item) => {
                   //console.log(value, item);
                 }}
                 */
-                onChange={(value, event) => {
-                  var temp_obj = {};
-                  Object.assign(temp_obj, f_subtasks);
-                  var temp_arr = Object.keys(f_subtasks);
-                  temp_arr.map((subtask) => {
-                    if (!value.includes(subtask)) {
-                      delete temp_obj[subtask];
-                    }
-                  }); //deletes the subtasks from the actual list if removed while editing
-                  temp_arr = Object.keys(temp_obj);
-                  value.map((subtask) => {
-                    if (!temp_arr.includes(subtask)) {
-                      temp_obj[subtask] = 0;
-                    }
-                  }); // adds new subtasks to the actual list if added while adding/editing tasks.
-                  setSubtasks(temp_obj);
-                }}
-              />
+                  onChange={(value, event) => {
+                    var temp_obj = {};
+                    Object.assign(temp_obj, f_subtasks);
+                    var temp_arr = Object.keys(f_subtasks);
+                    temp_arr.map((subtask) => {
+                      if (!value.includes(subtask)) {
+                        delete temp_obj[subtask];
+                      }
+                    }); //deletes the subtasks from the actual list if removed while editing
+                    temp_arr = Object.keys(temp_obj);
+                    value.map((subtask) => {
+                      if (!temp_arr.includes(subtask)) {
+                        temp_obj[subtask] = 0;
+                      }
+                    }); // adds new subtasks to the actual list if added while adding/editing tasks.
+                    setSubtasks(temp_obj);
+                  }}
+                />
               </div>
               <Form.HelpText>Press enter to separate subtasks</Form.HelpText>
             </Form.Group>
@@ -376,7 +435,6 @@ function Stacc(props) {
                 </Button>
               </ButtonToolbar>
             </Form.Group>
-            
           </Form>
         </Drawer.Body>
       </Drawer>

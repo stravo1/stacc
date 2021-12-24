@@ -1,10 +1,13 @@
-import React from "react";
-import { Button } from "rsuite";
+import React, { useState } from "react";
+import { Toggle } from "rsuite";
 import { gapi } from "gapi-script";
 import { useSelector } from "react-redux";
-import {MdOutlineConstruction} from "react-icons/md"
+import { MdOutlineConstruction } from "react-icons/md";
 
 function Settings(props) {
+  const [autoTrash, setAutoTrash] = useState(
+    localStorage.getItem("autoTrash") == "true" ? true : false
+  );
   function signIn() {
     gapi.auth2.getAuthInstance().signIn();
   }
@@ -15,26 +18,49 @@ function Settings(props) {
   return (
     <div style={{ margin: "1.5rem" }}>
       <div style={{ fontWeight: "500" }}>
-        <h3>account settings:</h3>
+        <div id="account_header">
+          <h3>sync</h3>
+          
+          <Toggle
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            checked={signInState}
+            onChange={() => {
+              if(signInState) signOut()
+              else signIn()
+            }}
+          />  
+          
+        </div>
+        signing in ensures you don't lose data when you switch or reset
+        browsers. it also syncs across devices :)
         <br />
-        signing in ensures you don't lose data when you switch or reset browsers. it also syncs accross devices :)
         <br />
         <br />
-        {!signInState ? (
-          <Button appearance="primary" color="green" onClick={() => signIn()}>
-            <span style={{ fontWeight: "bolder" }}>sign in</span>
-          </Button>
-        ) : (
-          <Button appearance="primary" color="red" onClick={() => signOut()}>
-            <span style={{ fontWeight: "bolder" }}>sign out</span>
-          </Button>
-        )}
-        <br />
+        <div id="autotrash_header">
+          <h3>autotrash</h3>
+          <Toggle
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            checked={autoTrash}
+            onChange={() => {
+              setAutoTrash(!autoTrash);
+              localStorage.setItem("autoTrash", !autoTrash);
+            }}
+          />
+        </div>
+        autotrash cleans all your tasks at the end of the day/week/month to
+        start fresh!!
         <br />
         <br />
         <br />
         <h3>other settings:</h3>
-        <br />
         <MdOutlineConstruction /> coming soon...
       </div>
     </div>

@@ -88,6 +88,9 @@ function ListMember(props) {
             fontWeight: "bold",
             color: "#3c3c3c",
             fontSize: "larger",
+            whiteSpace:"nowrap",
+            overflow:"scroll",
+            width:"80%"
           }}
         >
           {props.task.name}
