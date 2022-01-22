@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import reducers from "../../assets/js/reducer";
+import reducers from "../../assets/js/reducerMaker";
 import initialState from "../../assets/js/initialStateMaker";
 
 const weeklySlice = createSlice({

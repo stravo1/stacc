@@ -42,9 +42,9 @@ function Stacc(props) {
   const [id, setId] = useState(0);
 
   /* state values */
-  var posts = useSelector((state) => state[props.title].tasks);
-  var ongoing = posts.filter((task) => task.progress != 1);
-  var checked = posts.filter((task) => task.progress == 1);
+  var tasks = useSelector((state) => state[props.title].tasks);
+  var ongoing = tasks.filter((task) => task.progress != 1);
+  var checked = tasks.filter((task) => task.progress == 1);
   var time = useSelector((state) => state[props.title].time);
   var stacc_loaded = useSelector(
     (state) => state["general"].stacc[props.title]
@@ -77,7 +77,7 @@ function Stacc(props) {
     } else {
       localStorage.setItem(
         props.title,
-        JSON.stringify({ tasks: posts, time: time })
+        JSON.stringify({ tasks: tasks, time: time })
       );
     }
     //equivalent to componentDidMount
@@ -148,7 +148,7 @@ function Stacc(props) {
           dispatch(props.actions.updateTime());
           localStorage.setItem(
             props.title,
-            JSON.stringify({ tasks: posts, time: time })
+            JSON.stringify({ tasks: tasks, time: time })
           );
         }
       } else console.log("no autotrash");
@@ -156,13 +156,13 @@ function Stacc(props) {
 
   /* functions */
   function handleDelete(task) {
-    var index = posts.indexOf(task);
+    var index = tasks.indexOf(task);
     var x = window.confirm("Are you sure?");
     if (!x) {
       return;
     }
     dispatch(props.actions.delete(index));
-    //localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(tasks));
   }
 
   function handleAdd() {
@@ -182,7 +182,7 @@ function Stacc(props) {
       })
     );
     setOpen(false);
-    //localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(tasks));
   }
 
   function handleEdit() {
@@ -201,7 +201,7 @@ function Stacc(props) {
         progress: "calculate",
       })
     );
-    //localStorage.setItem(props.title, JSON.stringify(posts));
+    //localStorage.setItem(props.title, JSON.stringify(tasks));
     setOpen(false);
   }
 
