@@ -54,20 +54,24 @@ function Stacc(props) {
   var fileId = useSelector((state) => state["general"].id[props.title]);
   var signedIn = useSelector((state) => state["general"].signedIn);
 
-  /* cloud and loclastorage sync */
+  /* cloud and localstorage sync */
   useEffect(async () => {
     if (!stacc_loaded) {
+      // checks whether this task list was accessed before or is being opened for the first time after app launch
       if (!localStorage.getItem(props.title)) {
+        // if 'cache' not found then initiates cache
+        /*
         console.log("set localstorage for ", props.title, ":", {
           tasks: initialState(props.title).tasks,
           time: 0,
         });
+        */
         localStorage.setItem(
           props.title,
           JSON.stringify({ tasks: initialState(props.title).tasks, time: 0 })
         );
       } else {
-        console.log("restored from cache");
+        // else restore from 'cache'
         dispatch(props.actions.delete(0));
         dispatch(
           props.actions.set(JSON.parse(localStorage.getItem(props.title)))
@@ -75,6 +79,7 @@ function Stacc(props) {
       }
       dispatch(changeStaccLoaded({ list: props.title, value: 1 }));
     } else {
+      // this body is executed each time the page re-renders (after being stacc_loaded) => updates 'cache' at each render
       localStorage.setItem(
         props.title,
         JSON.stringify({ tasks: tasks, time: time })
@@ -82,12 +87,14 @@ function Stacc(props) {
     }
     //equivalent to componentDidMount
     if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
-      console.log("Only once: " + props.title);
+      // checks for a lot of initializations: if signedIn, if the required task's fileId is present and whether it has already been synced/updated with the 'cloud', if satisfied then it checks the cloud for updates
+      //console.log("Only once: " + props.title);
       var resp = await getFileContent(accessToken, fileId);
-      console.log(resp);
+      //console.log(resp);
       var c_time = JSON.parse(resp).time;
-      console.log(c_time, time, c_time > time);
+      //console.log(c_time, time, c_time > time);
       if (c_time > time) {
+        // checks which one of the lists are more up-to-date
         var x = window.confirm(
           "There are newer " +
             props.title +
@@ -100,58 +107,77 @@ function Stacc(props) {
           handleSync();
         }
       } else {
+        // uploads the current list if user chooses to not apply the updated tasks => update the cloud instead of updating local
         console.log("uploading current");
         handleSync();
       }
       dispatch(changeStaccSyncStat({ list: props.title, value: 1 }));
-      checkAutoTrash(time);
+      checkAutoTrash(time); // performs autotrash
     }
   });
 
   function checkAutoTrash(time) {
     var bool = false;
-    var text = ""
+    var text = "";
     switch (props.title) {
       case "daily":
         bool =
           new Date(time).getDate() - new Date().getDate() != 0 &&
           localStorage.getItem("autoTrash") == "true";
-        text = "day"
+        text = "day";
         break;
       case "weekly":
+        /*
+        bool =
+          new Date().getDay() == 0 && // first day of week
+          new Date(new Date(time).toString().split(" ").slice(0, 4).join(" ")).getTime() - new Date(new Date().toString().split(" ").slice(0, 4).join(" ")).getTime()!=0 && // not the same day
+          localStorage.getItem("autoTrash") == "true";
+        */
         bool =
           new Date().getDay() == 0 &&
-          new Date(new Date(time).toString().split(" ").slice(0, 4).join(" ")).getTime() - new Date(new Date().toString().split(" ").slice(0, 4).join(" ")).getTime()!=0 &&
+          new Date(
+            new Date(time).toString().split(" ").slice(0, 4).join(" ")
+          ).getTime() -
+            new Date(
+              new Date().toString().split(" ").slice(0, 4).join(" ")
+            ).getTime() !=
+            0 &&
           localStorage.getItem("autoTrash") == "true";
-        text = "week"
+        text = "week";
         break;
       case "monthly":
         bool =
-        new Date().getDate() == 0 &&
-        new Date(new Date(time).toString().split(" ").slice(0, 4).join(" ")).getTime() - new Date(new Date().toString().split(" ").slice(0, 4).join(" ")).getTime()!=0 &&
-        localStorage.getItem("autoTrash") == "true";
-        text = "month"
+          new Date().getDate() == 0 &&
+          new Date(
+            new Date(time).toString().split(" ").slice(0, 4).join(" ")
+          ).getTime() -
+            new Date(
+              new Date().toString().split(" ").slice(0, 4).join(" ")
+            ).getTime() !=
+            0 &&
+          localStorage.getItem("autoTrash") == "true";
+        text = "month";
         break;
     }
     if (bool) {
-        var x = window.confirm("These tasks are one " + text + " old. Trash 'em?");
-        if (x) {
-          dispatch(
-            props.actions.set({ tasks: [], time: new Date().getTime() })
-          );
-          localStorage.setItem(props.title, {
-            tasks: [],
-            time: new Date().getTime(),
-          });
-          handleSync();
-        } else {
-          dispatch(props.actions.updateTime());
-          localStorage.setItem(
-            props.title,
-            JSON.stringify({ tasks: tasks, time: time })
-          );
-        }
-      } else console.log("no autotrash");
+      var x = window.confirm(
+        "These tasks are one " + text + " old. Trash 'em?"
+      );
+      if (x) {
+        dispatch(props.actions.set({ tasks: [], time: new Date().getTime() }));
+        localStorage.setItem(props.title, {
+          tasks: [],
+          time: new Date().getTime(),
+        });
+        handleSync();
+      } else {
+        dispatch(props.actions.updateTime());
+        localStorage.setItem(
+          props.title,
+          JSON.stringify({ tasks: tasks, time: time })
+        );
+      }
+    } else console.log("no autotrash");
   }
 
   /* functions */

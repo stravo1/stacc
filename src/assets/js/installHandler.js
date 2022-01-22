@@ -1,6 +1,8 @@
 import { urlMaker, headerMaker } from "./urlAndHeaderMaker.js";
 import { getFileContent, uploadFiles } from "./requestHandler.js";
 
+/* this file checks for installation and if installed it also fetches the task files */
+
 const checkInstall = async (accessToken) =>{
     var daily, weekly, monthly;
     var res = await fetch(
@@ -12,8 +14,8 @@ const checkInstall = async (accessToken) =>{
     )
     var response = await res.json()
     var installFile = response.files.filter(file => file.name === "installed.json")
-    //console.log(installFile)
-    if(!installFile.length){
+    
+    if(!installFile.length){ // if not installed => install and initiate all the required files.
         var installFile = await uploadFiles(accessToken, "installed.json", JSON.stringify({"installed": JSON.stringify(new Date().getTime())}))
         daily = await uploadFiles(accessToken, "daily", localStorage.getItem("daily"))
         weekly = await uploadFiles(accessToken, "weekly", localStorage.getItem("weekly"))
@@ -25,8 +27,7 @@ const checkInstall = async (accessToken) =>{
             monthly: monthly.id,
         }
     }
-    else{
-        console.log("already installed", installFile)
+    else{ // if already installed then fetch all the file ids.
         var res = await getFileContent(accessToken, response.files[0].id)
         console.log(JSON.parse(res))
         return {
