@@ -39,6 +39,9 @@ var reducers = {
     console.log("time refeshed")
     state.time = new Date().getTime();
   },
+  selectTag(state, action){
+    state.selectedTag = action.payload;
+  }
 };
 
 export default reducers;

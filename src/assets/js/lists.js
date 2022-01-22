@@ -75,6 +75,14 @@ const borderColorMap = {
   violet: "rgb(91, 85, 168)",
 };
 
+const tagColorMap = {
+  green: "rgb(36, 198, 168)",
+  yellow: "rgb(202, 151, 0)",
+  blue: "rgb(0, 173, 212)",
+  red: "rgb(204, 89, 53)",
+  violet: "rgb(91, 85, 168)",
+};
+
 const titleMap = {
   daily: "today's",
   weekly: "week's",
@@ -85,5 +93,6 @@ export {
     color,
     colorMap,
     borderColorMap,
+    tagColorMap,
     titleMap,
 }

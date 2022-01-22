@@ -8,12 +8,13 @@ const monthlySlice = createSlice({
   reducers: reducers,
 });
 
-const { addTask, deleteTask, editTask,setTasks, updateTime } = monthlySlice.actions;
+const { addTask, deleteTask, editTask,setTasks, updateTime, selectTag } = monthlySlice.actions;
 export const actions = {
   set: setTasks,
   add: addTask,
   edit: editTask,
   delete: deleteTask,
   updateTime: updateTime,
+  selectTag: selectTag,
 }
 export default monthlySlice.reducer;

@@ -42,9 +42,10 @@ function Stacc(props) {
   const [id, setId] = useState(0);
 
   /* state values */
-  var tasks = useSelector((state) => state[props.title].tasks);
+  var tasks = useSelector((state) => state[props.title].tasks.filter(task => state[props.title].selectedTag == null ? true : task.tags.includes(state[props.title].selectedTag))); // tag select
   var ongoing = tasks.filter((task) => task.progress != 1);
   var checked = tasks.filter((task) => task.progress == 1);
+  var selectedTag = useSelector((state) => state[props.title].selectedTag);
   var time = useSelector((state) => state[props.title].time);
   var stacc_loaded = useSelector(
     (state) => state["general"].stacc[props.title]
@@ -254,6 +255,14 @@ function Stacc(props) {
     setId(bool ? task.id : 0);
     setOpen(true);
   }
+  function handleTagSelect(tag) {
+    if (selectedTag == tag) {
+      dispatch(props.actions.selectTag(null));
+    } else {
+      dispatch(props.actions.selectTag(tag));
+    }
+    console.log(selectedTag);
+  }
 
   return (
     <div style={{ height: "100vh" }}>
@@ -316,8 +325,10 @@ function Stacc(props) {
           >
             <ListMember
               task={post}
+              selectedTag={selectedTag}
               handleDelete={(task) => handleDelete(task)}
               handleOpen={(task) => handleOpen(task)}
+              handleTagSelect={(tag) => handleTagSelect(tag)}
               edit={(payload) => props.actions.edit(payload)}
             />
           </div>
@@ -330,8 +341,10 @@ function Stacc(props) {
           >
             <ListMember
               task={post}
+              selectedTag={selectedTag}
               handleDelete={(task) => handleDelete(task)}
               handleOpen={(task) => handleOpen(task)}
+              handleTagSelect={(tag) => handleTagSelect(tag)}
               edit={(payload) => props.actions.edit(payload)}
             />
           </div>
@@ -387,7 +400,7 @@ function Stacc(props) {
             <Form.Group controlId="tags">
               <Form.ControlLabel>Tags</Form.ControlLabel>
               <TagPicker
-                //creatable
+                creatable
                 data={tags}
                 defaultValue={f_tags}
                 style={{ width: 300 }}

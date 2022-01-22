@@ -12,6 +12,7 @@ const initialState = (name) => {
         id: 108,
       },
     ],
+    selectedTag: null,
     time: 0,
   };
 };
