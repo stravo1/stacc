@@ -32,18 +32,18 @@ function TaskModal(props) {
                   <Checkbox
                     checked={props.task.subtasks[subtask]}
                     onChange={(value, checked) => {
-                      console.log(value, checked);
+                      //console.log(value, checked);
                       var task_copy = {};
                       var subtasks_copy = {};
                       Object.assign(task_copy, props.task); // actual values are immutable
                       Object.assign(subtasks_copy, task_copy.subtasks); // actual values are immutable
-                      //console.log(task_copy.subtasks, Object.isFrozen(temp2))
+                      //console.log(task_copy.subtasks)
                       subtasks_copy[subtask] = checked;
                       task_copy.subtasks = subtasks_copy;
-
+                      //console.log(task_copy.subtasks)
                       var done = 0;
                       Object.keys(task_copy.subtasks).map((subtask) =>
-                        task_copy.subtasks[subtask] == 1 ? (done += 1) : ""
+                        task_copy.subtasks[subtask] == true ? (done += 1) : ""
                       );
                       var prog =
                         done /
@@ -76,7 +76,7 @@ function TaskModal(props) {
                           );
                         }
                       } else {
-                        task_copy["progress"] = "calculate";
+                        task_copy["progress"] = prog;
                         dispatch(props.edit(task_copy));
                       }
                     }}
