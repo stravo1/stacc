@@ -2,27 +2,22 @@ const tags = [
   {
     label: "Basic",
     value: "basic",
-    categories: "Importance",
   },
   {
     label: "Important",
     value: "important",
-    categories: "Importance",
   },
   {
     label: "Urgent",
     value: "urgent",
-    categories: "Importance",
   },
   {
     label: "Personal",
     value: "personal",
-    categories: "Type",
   },
   {
     label: "Work",
     value: "work",
-    categories: "Type",
   },
 ];
 

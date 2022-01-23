@@ -40,6 +40,7 @@ function Stacc(props) {
   const [f_desc, setDescription] = useState("");
   const [f_color, setColor] = useState(color[0].value);
   const [id, setId] = useState(0);
+  const [f_tags_list, setTagsList] = useState(tags)
 
   /* state values */
   var tasks = useSelector((state) => state[props.title].tasks.filter(task => state[props.title].selectedTag == null ? true : task.tags.includes(state[props.title].selectedTag))); // tag select
@@ -54,6 +55,9 @@ function Stacc(props) {
   var accessToken = useSelector((state) => state["general"].accessToken);
   var fileId = useSelector((state) => state["general"].id[props.title]);
   var signedIn = useSelector((state) => state["general"].signedIn);
+
+  /* custom tags list initial array */
+  var customList = []
 
   /* cloud and localstorage sync */
   useEffect(async () => {
@@ -247,6 +251,7 @@ function Stacc(props) {
     var bool = task != null;
     setAction(bool ? "Edit" : "Add");
     setName(bool ? task.name : "");
+    setCustomTagList(bool ? task.tags : null); // handles custom tag entries for displaying in the form
     setTags(bool ? task.tags : ["basic", "personal"]);
     setSubtasks(bool ? task.subtasks : {});
     setDescription(bool ? task.desc : "");
@@ -262,6 +267,21 @@ function Stacc(props) {
       dispatch(props.actions.selectTag(tag));
     }
     console.log(selectedTag);
+  }
+  function setCustomTagList(tagList){ // handles the custom tags set by user by including a {label, value} pair in the tags list for rendering during editing a task
+    if(tagList == null){ // "Add task" case
+      setTagsList(tags) // Produces default list, i.e., base tags list 
+    }
+    else{ // "Edit task" case
+      var defaults = ['basic','important','urgent','works','personal'];
+      var temp = tags.slice(); //copy by value
+      tagList.forEach(tag => { // Produces a list with custom tags' {label, value} pairs added to the base tagsl list.
+        if(!defaults.includes(tag)){
+          temp.push({label:tag, value: tag})
+        }
+      });
+      setTagsList(temp)
+    }
   }
 
   return (
@@ -401,11 +421,11 @@ function Stacc(props) {
               <Form.ControlLabel>Tags</Form.ControlLabel>
               <TagPicker
                 creatable
-                data={tags}
+                data={f_tags_list}
                 defaultValue={f_tags}
                 style={{ width: 300 }}
                 menuStyle={{ width: 250 }}
-                groupBy="categories"
+                //groupBy="categories"
                 placeholder="Add tags"
                 onChange={(value, event) => {
                   if (value == null) value = [];
