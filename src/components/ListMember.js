@@ -57,36 +57,47 @@ function ListMember(props) {
           className="customScroll"
           style={{ width: "90%", overflow: "scroll", whiteSpace: "nowrap" }}
         >
-          {props.task.tags.map((tag) => (
+          {props.selectedTag == null ? (
+            ""
+          ) : (
             <Tag
               size="md"
               color={props.task.color}
-              style={
-                props.selectedTag == tag
-                  ? {
-                      borderColor: borderColorMap[props.task.color],
-                      borderWidth: "1.5px",
-                      color: "whitesmoke",
-                      borderStyle: "solid",
-                      borderRadius: "1rem",
-                      fontWeight: "600",
-                      background: tagColorMap[props.task.color],
-                    }
-                  : {
-                      borderColor: borderColorMap[props.task.color],
-                      borderWidth: "1.5px",
-                      color: "black",
-                      borderStyle: "solid",
-                      borderRadius: "1rem",
-                      fontWeight: "400",
-                    }
-              }
-              onClick={() => props.handleTagSelect(tag)}
+              style={{
+                borderColor: tagColorMap[props.task.color],
+                borderWidth: "1.5px",
+                color: "white",
+                borderStyle: "solid",
+                borderRadius: "1rem",
+                fontWeight: "600",
+                background: tagColorMap[props.task.color],
+              }}
+              onClick={() => props.handleTagSelect(props.selectedTag)}
             >
               {" "}
-              <div>{tag[0].toUpperCase() + tag.slice(1)}</div>
+              <div>{props.selectedTag[0].toUpperCase() + props.selectedTag.slice(1)}</div>
             </Tag>
-          ))}
+          )}
+          {props.task.tags
+            .filter((tag) => tag != props.selectedTag)
+            .map((tag) => (
+              <Tag
+                size="md"
+                color={props.task.color}
+                style={{
+                  borderColor: borderColorMap[props.task.color],
+                  borderWidth: "1.5px",
+                  color: "black",
+                  borderStyle: "solid",
+                  borderRadius: "1rem",
+                  fontWeight: "400",
+                }}
+                onClick={() => props.handleTagSelect(tag)}
+              >
+                {" "}
+                <div>{tag[0].toUpperCase() + tag.slice(1)}</div>
+              </Tag>
+            ))}
         </TagGroup>
         <div
           onClick={() => setOpen(true)}
