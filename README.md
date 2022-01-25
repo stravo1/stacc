@@ -1,5 +1,5 @@
 
-# <sub>![icon](public/icons/android-icon-36x36.png)</sub> stacc 
+# <sub>![icon](public/icons/android-icon-36x36.png)</sub> [stacc](https://stravo1.github.io/stacc) 
   
 a web-based task manager which syncs across devices.  
 create tasks, subtasks and group them using tags!
