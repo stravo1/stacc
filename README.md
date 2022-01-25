@@ -1,9 +1,17 @@
 
 # <sub>![icon](public/icons/android-icon-36x36.png)</sub> [stacc](https://stravo1.github.io/stacc) 
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Stravo1/stacc) ![Lines of code](https://img.shields.io/tokei/lines/github/Stravo1/stacc) ![GitHub last commit](https://img.shields.io/github/last-commit/Stravo1/stacc) ![Website](https://img.shields.io/website?down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fstravo1.github.io%2Fstacc%2F) 
   
-a web-based task manager which syncs across devices: create tasks, subtasks and group them using tags!
 
-[User guide](https://github.com/Stravo1/stacc/wiki)
+a free, open, web-based task manager which syncs across devices!  
+  
+highlights:
+- view progress of tasks
+- group tasks using tags
+- differentiate tasks with beautiful colors
+
+## [User guide](https://github.com/Stravo1/stacc/wiki)
+Take a look at the [Github wiki](https://github.com/Stravo1/stacc/wiki) for detailed guide on how to use the app.
 
 ### Dependencies
 This webapp is created using:
