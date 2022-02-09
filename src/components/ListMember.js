@@ -24,12 +24,9 @@ function ListMember(props) {
     //console.log(task_copy.subtasks, Object.isFrozen(temp2))
     Object.keys(subtasks_copy).map((subtask) => (subtasks_copy[subtask] = arg));
     task_copy.subtasks = subtasks_copy;
-    if (!Object.keys(subtasks_copy).length) {
-      //alert("checked on zero subtasks")
-      task_copy["progress"] = arg;
-    } else {
-      task_copy["progress"] = "calculate"; //bodge1
-    }
+
+    task_copy["progress"] = arg; //bodge1
+
     //console.log(arg)
     dispatch(props.edit(task_copy));
   }
@@ -75,7 +72,10 @@ function ListMember(props) {
               onClick={() => props.handleTagSelect(props.selectedTag)}
             >
               {" "}
-              <div>{props.selectedTag[0].toUpperCase() + props.selectedTag.slice(1)}</div>
+              <div>
+                {props.selectedTag[0].toUpperCase() +
+                  props.selectedTag.slice(1)}
+              </div>
             </Tag>
           )}
           {props.task.tags

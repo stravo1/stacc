@@ -17,20 +17,6 @@ var reducers = {
   editTask(state, action) {
     state.tasks.map((task) => {
       if (task.id == action.payload.id) {
-        if (action.payload["progress"] === "calculate") {
-          //bodge1
-          var done = 0;
-          Object.keys(action.payload.subtasks).map((subtask) =>
-            action.payload.subtasks[subtask] === true ? (done += 1) : ""
-          );
-          
-          action.payload["progress"] =
-            done /
-            (Object.keys(action.payload.subtasks).length
-              ? Object.keys(action.payload.subtasks).length
-              : 1);
-          console.log(done / Object.keys(action.payload.subtasks).length);
-        }
         state.tasks[state.tasks.indexOf(task)] = action.payload;
       }
     });
