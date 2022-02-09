@@ -1,6 +1,5 @@
 
-# <sub>![icon](public/icons/android-icon-36x36.png)</sub> [stacc](https://stravo1.github.io/stacc) 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Stravo1/stacc) ![Lines of code](https://img.shields.io/tokei/lines/github/Stravo1/stacc) ![GitHub last commit](https://img.shields.io/github/last-commit/Stravo1/stacc) ![Website](https://img.shields.io/website?down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fstravo1.github.io%2Fstacc%2F) 
+# <sub>![icon](public/icons/android-icon-36x36.png)</sub> [stacc](https://stravo1.github.io/stacc) ![Lines of code](https://img.shields.io/tokei/lines/github/Stravo1/stacc) ![GitHub last commit](https://img.shields.io/github/last-commit/Stravo1/stacc) ![Website](https://img.shields.io/website?down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fstravo1.github.io%2Fstacc%2F) 
   
 
 a free, open, web-based task manager which syncs across devices!  
