@@ -100,6 +100,7 @@ function ListMember(props) {
             ))}
         </TagGroup>
         <div
+          className="customScroll"
           onClick={() => setOpen(true)}
           style={{
             position: "absolute",
