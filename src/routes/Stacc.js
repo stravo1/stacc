@@ -221,6 +221,19 @@ function Stacc(props) {
       alert("Please enter Task Name");
       return;
     }
+    var progress = 0;
+      //bodge1
+      var done = 0;
+      Object.keys(f_subtasks).map((subtask) =>
+      f_subtasks[subtask] === true ? (done += 1) : ""
+      );
+
+      progress =
+        done /
+        (Object.keys(f_subtasks).length
+          ? Object.keys(f_subtasks).length
+          : 1);
+    
     dispatch(
       props.actions.edit({
         name: f_name,
@@ -229,7 +242,7 @@ function Stacc(props) {
         tags: f_tags,
         color: f_color,
         id: id,
-        progress: "calculate",
+        progress: progress,
       })
     );
     //localStorage.setItem(props.title, JSON.stringify(tasks));
