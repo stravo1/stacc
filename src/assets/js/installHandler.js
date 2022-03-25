@@ -28,8 +28,6 @@ const checkInstall = async (accessToken) =>{
         }
     }
     else{ // if already installed then fetch all the file ids.
-        var res = await getFileContent(accessToken, response.files[0].id)
-        console.log(JSON.parse(res))
         return {
             daily: response.files.filter(file => file.name === "daily")[0].id,
             weekly: response.files.filter(file => file.name === "weekly")[0].id,
