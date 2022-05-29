@@ -21,6 +21,7 @@ const generalSlice = createSlice({
             weekly: 0,
             monthly: 0,
         },
+        syncing: false,
     },
     reducers: {
         changeLoaded(state, action){
@@ -48,9 +49,12 @@ const generalSlice = createSlice({
         setAccessToken(state, action){
             console.log(action.payload)
             state.accessToken = action.payload
+        },
+        setSyncing(state, action){
+            state.syncing = action.payload
         }
     }
 })
 
-export const { changeLoaded, changeSignInState, changeStaccLoaded, changeStaccSyncStat, resetStacc, setAccessToken, setIds } = generalSlice.actions;
+export const { changeLoaded, changeSignInState, changeStaccLoaded, changeStaccSyncStat, resetStacc, setAccessToken, setIds, setSyncing } = generalSlice.actions;
 export default generalSlice.reducer;

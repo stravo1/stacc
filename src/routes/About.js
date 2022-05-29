@@ -19,17 +19,16 @@ function About() {
         </Carousel>
         <br></br>
         <br></br>
-        <Panel header="About stacc" bordered>
+        <Panel header="About stacc v0.1" bordered>
           <p>
             stacc is a simple task manager created with functionality in mind.
             Create tasks, track their progresses and access them anywhere from
-            any device!
+            any device with auto sync!
           </p>
           <p>
             This client app is built using React with React Suite, Redux, and
             React Router. Sync is enabled using the Google Drive API.
           </p>
-
           <div
             style={{
               padding: "1rem 0 0",

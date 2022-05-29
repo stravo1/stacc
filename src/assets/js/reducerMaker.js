@@ -7,12 +7,14 @@ var reducers = {
     //console.log(109)
     state.tasks.unshift(action.payload);
     state.time = new Date().getTime();
+    state.upload = true;
   },
   deleteTask(state, action) {
     console.log(108, action.payload);
     //var temp = state;
     state.tasks.splice(action.payload, 1);
     state.time = new Date().getTime();
+    state.upload = true;
   },
   editTask(state, action) {
     state.tasks.map((task) => {
@@ -21,6 +23,10 @@ var reducers = {
       }
     });
     state.time = new Date().getTime();
+    state.upload = true;
+  },
+  setUpload(state, action) {
+    state.upload = action.payload;
   },
   updateTime(state) {
     console.log("time refeshed");
