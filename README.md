@@ -9,6 +9,7 @@ highlights:
 - view progress of tasks
 - group tasks using tags
 - differentiate tasks with beautiful colors
+- sync across devices effortlessly 
 
 ## [User guide](https://github.com/Stravo1/stacc/wiki)
 Take a look at the [Github wiki](https://github.com/Stravo1/stacc/wiki) for detailed guide on how to use the app.
