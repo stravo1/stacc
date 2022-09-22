@@ -188,7 +188,7 @@ function Stacc(props) {
   /* functions */
   function handleDelete(task) {
     var index = tasks.indexOf(task);
-    var x = window.confirm("Are you sure?");
+    var x = window.confirm("Delte this task?");
     if (!x) {
       return;
     }
