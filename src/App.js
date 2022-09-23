@@ -104,7 +104,7 @@ function App() {
   const [open, setOpen] = useState(false);
   async function handleSync() {
     alert(
-      "Please don't close the app while syncing. You'll be informed when the process is complete"
+      "Don't close !! App is syncing recently made changes"
     );
     await uploadFiles(
       accessToken,
