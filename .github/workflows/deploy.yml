@@ -1,4 +1,4 @@
-name: CI/CD
+name: deploy
 
 on:
   push:
@@ -33,3 +33,4 @@ jobs:
         user_email: 'github-actions[bot]@users.noreply.github.com'
         github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         repository: ${{ github.repository }}
+        CI: false
