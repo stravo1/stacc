@@ -36,6 +36,9 @@ html, body{
 .rs-drawer-right.rs-drawer-xs {
   width: 200px;
 }
+.rs-modal-dialog{
+  padding: 1rem;
+}
 .rs-modal-content {
   position: relative;
   top: 8vh;
@@ -198,4 +201,31 @@ html, body{
 #account_header{
   display: grid;
   grid-template-columns: 1fr 0.1fr;
+}
+
+.icon-spin {
+  -webkit-animation: icon-spin 2s infinite linear;
+          animation: icon-spin 2s infinite linear;
+}
+
+@-webkit-keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
 }

@@ -5,7 +5,7 @@ const initialState = (name) => {
       {
         name: "Sample Task",
         desc: "Sample Description",
-        progress: (1 / 2),
+        progress: 1 / 2,
         tags: ["basic"],
         subtasks: { "Sample Subtask 1": 1, "Sample Subtask 2": 0 },
         color: "green",
@@ -14,6 +14,7 @@ const initialState = (name) => {
     ],
     selectedTag: null,
     time: 0,
+    upload: false,
   };
 };
 

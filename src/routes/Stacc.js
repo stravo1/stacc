@@ -17,6 +17,7 @@ import { tags, color } from "../assets/js/lists";
 import {
   changeStaccLoaded,
   changeStaccSyncStat,
+  setSyncing
 } from "../store/slices/generalSlice";
 import kitty from "../assets/svg/kitty.svg";
 import initialState from "../assets/js/initialStateMaker";
@@ -32,6 +33,7 @@ function Stacc(props) {
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState("");
   const [active, setActive] = useState("ongoing");
+  const [isUploading, setIsUploading] = useState(false);
 
   /* form values */
   const [f_name, setName] = useState("");
@@ -40,10 +42,16 @@ function Stacc(props) {
   const [f_desc, setDescription] = useState("");
   const [f_color, setColor] = useState(color[0].value);
   const [id, setId] = useState(0);
-  const [f_tags_list, setTagsList] = useState(tags)
+  const [f_tags_list, setTagsList] = useState(tags);
 
   /* state values */
-  var tasks = useSelector((state) => state[props.title].tasks.filter(task => state[props.title].selectedTag == null ? true : task.tags.includes(state[props.title].selectedTag))); // tag select
+  var tasks = useSelector((state) =>
+    state[props.title].tasks.filter((task) =>
+      state[props.title].selectedTag == null
+        ? true
+        : task.tags.includes(state[props.title].selectedTag)
+    )
+  ); // tag select
   var ongoing = tasks.filter((task) => task.progress != 1);
   var checked = tasks.filter((task) => task.progress == 1);
   var selectedTag = useSelector((state) => state[props.title].selectedTag);
@@ -55,9 +63,10 @@ function Stacc(props) {
   var accessToken = useSelector((state) => state["general"].accessToken);
   var fileId = useSelector((state) => state["general"].id[props.title]);
   var signedIn = useSelector((state) => state["general"].signedIn);
+  var upload = useSelector((state) => state[props.title].upload);
 
   /* custom tags list initial array */
-  var customList = []
+  var customList = [];
 
   /* cloud and localstorage sync */
   useEffect(async () => {
@@ -89,6 +98,11 @@ function Stacc(props) {
         props.title,
         JSON.stringify({ tasks: tasks, time: time })
       );
+      /* auto sync */
+      if (signedIn && stacc_loaded && fileId != 0 && upload && !isUploading) {
+        dispatch(props.actions.setUpload(false))
+        handleSync();
+      }
     }
     //equivalent to componentDidMount
     if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
@@ -222,18 +236,16 @@ function Stacc(props) {
       return;
     }
     var progress = 0;
-      //bodge1
-      var done = 0;
-      Object.keys(f_subtasks).map((subtask) =>
+    //bodge1
+    var done = 0;
+    Object.keys(f_subtasks).map((subtask) =>
       f_subtasks[subtask] === true ? (done += 1) : ""
-      );
+    );
 
-      progress =
-        done /
-        (Object.keys(f_subtasks).length
-          ? Object.keys(f_subtasks).length
-          : 1);
-    
+    progress =
+      done /
+      (Object.keys(f_subtasks).length ? Object.keys(f_subtasks).length : 1);
+
     dispatch(
       props.actions.edit({
         name: f_name,
@@ -250,6 +262,8 @@ function Stacc(props) {
   }
 
   async function handleSync() {
+    setIsUploading(true);
+    dispatch(setSyncing(true))
     var res = await uploadFiles(
       accessToken,
       props.title,
@@ -257,6 +271,8 @@ function Stacc(props) {
       fileId
     );
     console.log(res);
+    dispatch(setSyncing(false))
+    setIsUploading(false);
   }
 
   function handleOpen(task = null) {
@@ -281,19 +297,22 @@ function Stacc(props) {
     }
     console.log(selectedTag);
   }
-  function setCustomTagList(tagList){ // handles the custom tags set by user by including a {label, value} pair in the tags list for rendering during editing a task
-    if(tagList == null){ // "Add task" case
-      setTagsList(tags) // Produces default list, i.e., base tags list 
-    }
-    else{ // "Edit task" case
-      var defaults = ['basic','important','urgent','works','personal'];
+  function setCustomTagList(tagList) {
+    // handles the custom tags set by user by including a {label, value} pair in the tags list for rendering during editing a task
+    if (tagList == null) {
+      // "Add task" case
+      setTagsList(tags); // Produces default list, i.e., base tags list
+    } else {
+      // "Edit task" case
+      var defaults = ["basic", "important", "urgent", "works", "personal"];
       var temp = tags.slice(); //copy by value
-      tagList.forEach(tag => { // Produces a list with custom tags' {label, value} pairs added to the base tagsl list.
-        if(!defaults.includes(tag)){
-          temp.push({label:tag, value: tag})
+      tagList.forEach((tag) => {
+        // Produces a list with custom tags' {label, value} pairs added to the base tagsl list.
+        if (!defaults.includes(tag)) {
+          temp.push({ label: tag, value: tag });
         }
       });
-      setTagsList(temp)
+      setTagsList(temp);
     }
   }
 

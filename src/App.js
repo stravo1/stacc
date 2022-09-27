@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { Container, Header, Content, Grid, Row, Col } from "rsuite";
+import {
+  Container,
+  Header,
+  Content,
+  Grid,
+  Row,
+  Col,
+  Modal,
+  Button,
+} from "rsuite";
 import SideNav from "./components/SideNav";
 import { gapi } from "gapi-script";
 import checkInstall from "./assets/js/installHandler";
@@ -13,7 +22,8 @@ import {
   setIds,
 } from "./store/slices/generalSlice";
 import { RiAppsLine } from "react-icons/ri";
-import { FiUploadCloud } from "react-icons/fi";
+import { BiLoaderAlt } from "react-icons/bi";
+import { BsCheck2Circle } from "react-icons/bs";
 import { uploadFiles } from "./assets/js/requestHandler";
 
 var CLIENT_ID =
@@ -31,11 +41,11 @@ function App() {
   var signInState = useSelector((state) => state["general"].signedIn);
   var accessToken = useSelector((state) => state["general"].accessToken);
   var fileIds = useSelector((state) => state["general"].id);
+  var syncing = useSelector((state) => state["general"].syncing);
 
   useEffect(() => {
     //equivalent to componentDidMount
     if (!loaded) {
-
       gapi.load("client:auth2", function () {
         ////console.log(108)
         gapi.client
@@ -102,6 +112,11 @@ function App() {
     }
   });
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  function handleClose() {
+    setModalOpen(false);
+  }
   async function handleSync() {
     alert(
       "Please don't close the app while syncing. You'll be informed when the process is complete"
@@ -183,16 +198,29 @@ function App() {
                   paddingRight: "1rem",
                 }}
               >
-                <FiUploadCloud
-                  className="fade-in"
-                  onClick={() => handleSync()}
-                  style={
-                    signInState && fileIds["daily"]
-                      ? { display: "unset" }
-                      : { display: "none" }
-                  }
-                  fontSize="1.5rem"
-                />
+                {syncing ? (
+                  <BiLoaderAlt
+                    className="fade-in icon-spin"
+                    onClick={() => setModalOpen(true)}
+                    style={
+                      signInState && fileIds["daily"]
+                        ? { display: "unset" }
+                        : { display: "none" }
+                    }
+                    fontSize="1.5rem"
+                  />
+                ) : (
+                  <BsCheck2Circle
+                    className="fade-in"
+                    onClick={() => setModalOpen(true)}
+                    style={
+                      signInState && fileIds["daily"]
+                        ? { display: "unset" }
+                        : { display: "none" }
+                    }
+                    fontSize="1.5rem"
+                  />
+                )}
               </Col>
             </Row>
           </Grid>
@@ -209,6 +237,26 @@ function App() {
         </Content>
         <SideNav open={open} setOpen={(bool) => setOpen(bool)} />
       </Container>
+      <Modal size="small" open={modalOpen} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Sync</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <span style={{ opacity: "0.5" }}>
+            {!syncing ? "Tasks have been synced!" : "Syncing in process..."}
+          </span>
+          <br></br>
+          <span style={{ fontSize: "small" }}>Sync all tasks manually?</span>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button disabled={syncing} onClick={()=>{handleSync(); handleClose()}} appearance="primary">
+            Sync
+          </Button>
+          <Button onClick={handleClose} appearance="subtle">
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
