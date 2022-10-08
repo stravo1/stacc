@@ -17,7 +17,7 @@ import { tags, color } from "../assets/js/lists";
 import {
   changeStaccLoaded,
   changeStaccSyncStat,
-  setSyncing
+  setSyncing,
 } from "../store/slices/generalSlice";
 import kitty from "../assets/svg/kitty.svg";
 import initialState from "../assets/js/initialStateMaker";
@@ -100,13 +100,14 @@ function Stacc(props) {
       );
       /* auto sync */
       if (signedIn && stacc_loaded && fileId != 0 && upload && !isUploading) {
-        dispatch(props.actions.setUpload(false))
+        dispatch(props.actions.setUpload(false));
         handleSync();
       }
     }
     //equivalent to componentDidMount
+    // checks for a lot of initializations: if signedIn, if the required task's fileId is present and whether it has already been synced/updated with the 'cloud', if satisfied then it checks the cloud for updates
     if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
-      // checks for a lot of initializations: if signedIn, if the required task's fileId is present and whether it has already been synced/updated with the 'cloud', if satisfied then it checks the cloud for updates
+      dispatch(changeStaccSyncStat({ list: props.title, value: 1 })); // set the sync status for this list of tasks as done
       //console.log("Only once: " + props.title);
       var resp = await getFileContent(accessToken, fileId);
       //console.log(resp);
@@ -130,7 +131,6 @@ function Stacc(props) {
         console.log("uploading current");
         handleSync();
       }
-      dispatch(changeStaccSyncStat({ list: props.title, value: 1 }));
       checkAutoTrash(time); // performs autotrash
     }
   });
@@ -263,7 +263,7 @@ function Stacc(props) {
 
   async function handleSync() {
     setIsUploading(true);
-    dispatch(setSyncing(true))
+    dispatch(setSyncing(true));
     var res = await uploadFiles(
       accessToken,
       props.title,
@@ -271,7 +271,7 @@ function Stacc(props) {
       fileId
     );
     console.log(res);
-    dispatch(setSyncing(false))
+    dispatch(setSyncing(false));
     setIsUploading(false);
   }
 
