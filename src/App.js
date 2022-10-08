@@ -12,6 +12,7 @@ import {
 } from "rsuite";
 import SideNav from "./components/SideNav";
 import { gapi } from "gapi-script";
+import axios from "axios";
 import checkInstall from "./assets/js/installHandler";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,7 +25,7 @@ import {
 import { RiAppsLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
 import { BsCheck2Circle } from "react-icons/bs";
-import { uploadFiles } from "./assets/js/requestHandler";
+import { uploadFiles, getNewToken } from "./assets/js/requestHandler";
 
 var CLIENT_ID =
   "25256502274-6b15ibif1usnm9rtbi4blennjrvrl5lm.apps.googleusercontent.com";
@@ -44,73 +45,25 @@ function App() {
   var syncing = useSelector((state) => state["general"].syncing);
 
   useEffect(() => {
-    //equivalent to componentDidMount
-    if (!loaded) {
-      gapi.load("client:auth2", function () {
-        ////console.log(108)
-        gapi.client
-          .init({
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-          })
-          .then(
-            async function () {
-              // Listen for sign-in state changes.
-              gapi.auth2.getAuthInstance().isSignedIn.listen(async (state) => {
-                console.log(state);
-                dispatch(changeSignInState(state));
-                if (state) {
-                  dispatch(
-                    setAccessToken(
-                      gapi.auth2
-                        .getAuthInstance()
-                        .currentUser.get()
-                        .getAuthResponse().access_token
-                    )
-                  );
-                  var x = await checkInstall(
-                    gapi.auth2
-                      .getAuthInstance()
-                      .currentUser.get()
-                      .getAuthResponse().access_token
-                  );
-                  dispatch(setIds(x));
-                  dispatch(resetStacc()); //resets the stacc_loaded status for refreshing the lists from drive after sign-in
-                }
-              });
-              // Handle the initial sign-in state.
-              dispatch(
-                changeSignInState(gapi.auth2.getAuthInstance().isSignedIn.get())
-              );
-              console.log(signInState);
-              if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                dispatch(
-                  setAccessToken(
-                    gapi.auth2
-                      .getAuthInstance()
-                      .currentUser.get()
-                      .getAuthResponse().access_token
-                  )
-                );
-                var x = await checkInstall(
-                  gapi.auth2
-                    .getAuthInstance()
-                    .currentUser.get()
-                    .getAuthResponse().access_token
-                );
-                dispatch(setIds(x));
-              }
-              //console.log(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token)
-            },
-            function (error) {
-              window.alert(JSON.stringify(error, null, 2));
-            }
-          );
-      });
-      dispatch(changeLoaded(1));
-    }
-  });
+    (async () => {
+      /* check in refresh-token is available */
+      if (localStorage.getItem("refresh_token")) {
+        /* set log-in status to be true */
+        dispatch(changeSignInState(true));
+
+        /* set new access token */
+        var token = await getNewToken();
+        dispatch(setAccessToken(token));
+
+        /* check install */
+        var x = await checkInstall(token);
+
+        /* setIds and reset staccs */
+        dispatch(setIds(x));
+        dispatch(resetStacc());
+      }
+    })();
+  }, [loaded]);
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -249,7 +202,14 @@ function App() {
           <span style={{ fontSize: "small" }}>Sync all tasks manually?</span>
         </Modal.Body>
         <Modal.Footer>
-          <Button disabled={syncing} onClick={()=>{handleSync(); handleClose()}} appearance="primary">
+          <Button
+            disabled={syncing}
+            onClick={() => {
+              handleSync();
+              handleClose();
+            }}
+            appearance="primary"
+          >
             Sync
           </Button>
           <Button onClick={handleClose} appearance="subtle">

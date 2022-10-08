@@ -1,3 +1,4 @@
+import axios from "axios";
 const uploadFiles = async (
   accessToken,
   name,
@@ -13,7 +14,11 @@ const uploadFiles = async (
   var xhr_up = new XMLHttpRequest();
   xhr_up.open(
     fileId == null ? "POST" : "PATCH",
-    fileId == null ? "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart" : "https://www.googleapis.com/upload/drive/v3/files/" + fileId + "?uploadType=multipart"
+    fileId == null
+      ? "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart"
+      : "https://www.googleapis.com/upload/drive/v3/files/" +
+          fileId +
+          "?uploadType=multipart"
   );
   xhr_up.setRequestHeader("Authorization", "Bearer " + accessToken);
   //xhr_up.upload.onprogress = updateProgress
@@ -36,9 +41,9 @@ const uploadFiles = async (
     mimeType: fileType,
     parents: [parent],
   };
-  if(fileId != null){
-    delete metadata["parents"]
-    delete metadata["name"]
+  if (fileId != null) {
+    delete metadata["parents"];
+    delete metadata["name"];
   }
   var file = new Blob([fileContent], { type: fileType });
 
@@ -54,7 +59,7 @@ const uploadFiles = async (
   return response;
 };
 
-const getFileContent = async (accessToken,fileId) => {
+const getFileContent = async (accessToken, fileId) => {
   var outResolve, response;
   var format = "raw";
   //console.log(state.filesList, "messages");
@@ -86,5 +91,15 @@ const getFileContent = async (accessToken,fileId) => {
 
   return response;
 };
-
-export { uploadFiles, getFileContent };
+const getNewToken = async () => {
+  var refreshToken = localStorage.getItem("refresh_token");
+  var res = await axios.post(
+    "http://localhost:3001/auth/google/refresh-token",
+    {
+      refreshToken,
+    }
+  );
+  localStorage.setItem("access_token", res.data.access_token);
+  return res.data.access_token;
+};
+export { uploadFiles, getFileContent, getNewToken };

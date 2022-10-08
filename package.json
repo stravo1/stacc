@@ -1,14 +1,16 @@
 {
   "name": "stacc_test",
-  "homepage":"https://stravo1.github.io/stacc",
+  "homepage": "https://stravo1.github.io/stacc",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-oauth/google": "^0.2.8",
     "@reduxjs/toolkit": "^1.6.2",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^1.1.2",
     "customize-cra": "^1.0.0",
     "gapi-script": "^1.2.0",
     "less": "^4.1.2",
@@ -40,8 +42,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

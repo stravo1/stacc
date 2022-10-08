@@ -1,16 +1,52 @@
 import React, { useState } from "react";
 import { Toggle } from "rsuite";
 import { gapi } from "gapi-script";
-import { useSelector } from "react-redux";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useSelector, useDispatch } from "react-redux";
 import { MdOutlineConstruction } from "react-icons/md";
+import {
+  changeLoaded,
+  changeSignInState,
+  setAccessToken,
+} from "../store/slices/generalSlice";
 
 function Settings(props) {
+  var dispatch = useDispatch();
   const [autoTrash, setAutoTrash] = useState(
     localStorage.getItem("autoTrash") == "true" ? true : false
   );
-  function signIn() {
-    gapi.auth2.getAuthInstance().signIn();
-  }
+  const login = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      var code = codeResponse.code;
+
+      const tokens = await axios.post("http://localhost:3001/auth/google", {
+        // http://localhost:3001/auth/google backend that will exchange the code
+        code,
+      });
+
+      /* store tokens */
+      dispatch(setAccessToken(tokens.data.access_token));
+      localStorage.setItem("access_token", tokens.data.access_token);
+      localStorage.setItem("refresh_token", tokens.data.refresh_token);
+
+      /* update sign in status */
+      dispatch(changeSignInState(true));
+      dispatch(changeLoaded(1));
+
+      console.log(tokens);
+    },
+    flow: "auth-code",
+    scope: "https://www.googleapis.com/auth/drive.appdata",
+  });
+  const logOut = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    dispatch(changeSignInState(false));
+    dispatch(changeLoaded(0));
+  };
+
   function signOut() {
     gapi.auth2.getAuthInstance().signOut();
   }
@@ -20,7 +56,7 @@ function Settings(props) {
       <div style={{ fontWeight: "500" }}>
         <div id="account_header">
           <h3>sync</h3>
-          
+
           <Toggle
             style={{
               display: "flex",
@@ -29,11 +65,10 @@ function Settings(props) {
             }}
             checked={signInState}
             onChange={() => {
-              if(signInState) signOut()
-              else signIn()
+              if (signInState) logOut();
+              else login();
             }}
-          />  
-          
+          />
         </div>
         signing in ensures you don't lose data when you switch or reset
         browsers. it also syncs across devices :)
