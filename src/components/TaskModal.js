@@ -3,9 +3,9 @@ import { Modal, Button, Checkbox, Placeholder } from "rsuite";
 import { useDispatch } from "react-redux";
 
 function TaskModal(props) {
-  const { Paragraph } = Placeholder; 
+  const { Paragraph } = Placeholder;
   const handleClose = () => props.close();
-  
+
   var dispatch = useDispatch();
   return (
     <>
@@ -18,23 +18,52 @@ function TaskModal(props) {
         <Modal.Body style={{ color: "#3c3c3c" }}>
           <div className="modalDesc">
             <h5> Description: </h5>
-            <div className={props.task.desc ? "content customScroll" : "noContent customScroll"}>
-              {props.task.desc ? props.task.desc : <><br />Nothing here!<Paragraph color="red" a rows={3} active /></> }
-              
+            <div
+              className={
+                props.task.desc
+                  ? "content customScroll"
+                  : "noContent customScroll"
+              }
+            >
+              {props.task.desc ? (
+                props.task.desc
+              ) : (
+                <>
+                  <br />
+                  Nothing here!
+                  <Paragraph color="red" a rows={3} active />
+                </>
+              )}
             </div>
           </div>
           <div className="modalSubtasks">
             <h5> Subtasks: </h5>
-            <div className={Object.keys(props.task.subtasks).length ? "content customScroll" : "noContent customScroll"}>
-              {Object.keys(props.task.subtasks).length ? "" : <><br />Nothing here! <Paragraph color="red" a rows={3} active /></>}
-              {Object.keys(props.task.subtasks).map((subtask) => (
-                <div style={{ color: "#3c3c3c", fontWeight: "bolder" }}>
+            <div
+              className={
+                Object.keys(props.task.subtasks).length
+                  ? "content customScroll"
+                  : "noContent customScroll"
+              }
+            >
+              {Object.keys(props.task.subtasks).length ? (
+                ""
+              ) : (
+                <>
+                  <br />
+                  Nothing here! <Paragraph color="red" a rows={3} active />
+                </>
+              )}
+              {Object.keys(props.task.subtasks).map((subtask, index) => (
+                <div
+                  key={index}
+                  style={{ color: "#3c3c3c", fontWeight: "bolder" }}
+                >
                   <Checkbox
                     checked={props.task.subtasks[subtask]}
                     onChange={(value, checked) => {
                       //console.log(value, checked);
 
-                      /* Calculate progress of the task */ 
+                      /* Calculate progress of the task */
                       var task_copy = {};
                       var subtasks_copy = {};
                       Object.assign(task_copy, props.task); // actual values are immutable

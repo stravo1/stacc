@@ -20,7 +20,7 @@ function Settings(props) {
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;
 
-      const tokens = await axios.post("http://localhost:3001/auth/google", {
+      const tokens = await axios.post("https://ninth-matter-357304.el.r.appspot.com/auth/google", {
         // http://localhost:3001/auth/google backend that will exchange the code
         code,
       });
@@ -47,9 +47,6 @@ function Settings(props) {
     dispatch(changeLoaded(0));
   };
 
-  function signOut() {
-    gapi.auth2.getAuthInstance().signOut();
-  }
   var signInState = useSelector((state) => state["general"].signedIn);
   return (
     <div style={{ margin: "1.5rem" }}>

@@ -369,8 +369,9 @@ function Stacc(props) {
         ) : (
           ""
         )}
-        {ongoing.map((post) => (
+        {ongoing.map((post, index) => (
           <div
+            key={index}
             style={
               active == "ongoing" ? { display: "unset" } : { display: "none" }
             }

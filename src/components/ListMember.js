@@ -80,8 +80,9 @@ function ListMember(props) {
           )}
           {props.task.tags
             .filter((tag) => tag != props.selectedTag)
-            .map((tag) => (
+            .map((tag, index) => (
               <Tag
+                key={index}
                 size="md"
                 color={props.task.color}
                 style={{
