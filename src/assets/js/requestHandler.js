@@ -94,7 +94,7 @@ const getFileContent = async (accessToken, fileId) => {
 const getNewToken = async () => {
   var refreshToken = localStorage.getItem("refresh_token");
   var res = await axios.post(
-    "https://ninth-matter-357304.el.r.appspot.com/auth/google/refresh-token",
+    "https://red-formula-303406.ue.r.appspot.com/auth/stacc/refresh-token",
     {
       refreshToken,
     }

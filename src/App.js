@@ -11,8 +11,6 @@ import {
   Button,
 } from "rsuite";
 import SideNav from "./components/SideNav";
-import { gapi } from "gapi-script";
-import axios from "axios";
 import checkInstall from "./assets/js/installHandler";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -27,14 +25,6 @@ import { BiLoaderAlt } from "react-icons/bi";
 import { BsCheck2Circle } from "react-icons/bs";
 import { uploadFiles, getNewToken } from "./assets/js/requestHandler";
 
-var CLIENT_ID =
-  "25256502274-6b15ibif1usnm9rtbi4blennjrvrl5lm.apps.googleusercontent.com";
-// Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = [
-  "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-];
-// accesses only the appData folder
-var SCOPES = "https://www.googleapis.com/auth/drive.appdata";
 
 function App() {
   var dispatch = useDispatch();

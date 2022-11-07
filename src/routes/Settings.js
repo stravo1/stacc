@@ -20,7 +20,7 @@ function Settings(props) {
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;
 
-      const tokens = await axios.post("https://ninth-matter-357304.el.r.appspot.com/auth/google", {
+      const tokens = await axios.post("https://red-formula-303406.ue.r.appspot.com/auth/stacc", {
         // http://localhost:3001/auth/google backend that will exchange the code
         code,
       });
