@@ -69,70 +69,73 @@ function Stacc(props) {
   var customList = [];
 
   /* cloud and localstorage sync */
-  useEffect(async () => {
-    if (!stacc_loaded) {
-      // checks whether this task list was accessed before or is being opened for the first time after app launch
-      if (!localStorage.getItem(props.title)) {
-        // if 'cache' not found then initiates cache
-        /*
+  useEffect(() => {
+    async function lambda() {
+      if (!stacc_loaded) {
+        // checks whether this task list was accessed before or is being opened for the first time after app launch
+        if (!localStorage.getItem(props.title)) {
+          // if 'cache' not found then initiates cache
+          /*
         console.log("set localstorage for ", props.title, ":", {
           tasks: initialState(props.title).tasks,
           time: 0,
         });
         */
+          localStorage.setItem(
+            props.title,
+            JSON.stringify({ tasks: initialState(props.title).tasks, time: 0 })
+          );
+        } else {
+          // else restore from 'cache'
+          dispatch(props.actions.delete(0));
+          dispatch(
+            props.actions.set(JSON.parse(localStorage.getItem(props.title)))
+          );
+        }
+        dispatch(changeStaccLoaded({ list: props.title, value: 1 }));
+      } else {
+        // this body is executed each time the page re-renders (after being stacc_loaded) => updates 'cache' at each render
         localStorage.setItem(
           props.title,
-          JSON.stringify({ tasks: initialState(props.title).tasks, time: 0 })
+          JSON.stringify({ tasks: tasks, time: time })
         );
-      } else {
-        // else restore from 'cache'
-        dispatch(props.actions.delete(0));
-        dispatch(
-          props.actions.set(JSON.parse(localStorage.getItem(props.title)))
-        );
-      }
-      dispatch(changeStaccLoaded({ list: props.title, value: 1 }));
-    } else {
-      // this body is executed each time the page re-renders (after being stacc_loaded) => updates 'cache' at each render
-      localStorage.setItem(
-        props.title,
-        JSON.stringify({ tasks: tasks, time: time })
-      );
-      /* auto sync */
-      if (signedIn && stacc_loaded && fileId != 0 && upload && !isUploading) {
-        dispatch(props.actions.setUpload(false));
-        handleSync();
-      }
-    }
-    //equivalent to componentDidMount
-    // checks for a lot of initializations: if signedIn, if the required task's fileId is present and whether it has already been synced/updated with the 'cloud', if satisfied then it checks the cloud for updates
-    if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
-      dispatch(changeStaccSyncStat({ list: props.title, value: 1 })); // set the sync status for this list of tasks as done
-      //console.log("Only once: " + props.title);
-      var resp = await getFileContent(accessToken, fileId);
-      //console.log(resp);
-      var c_time = JSON.parse(resp).time;
-      //console.log(c_time, time, c_time > time);
-      if (c_time > time) {
-        // checks which one of the lists are more up-to-date
-        var x = window.confirm(
-          "There are newer " +
-            props.title +
-            " tasks available, replace current ones?"
-        );
-        if (x) {
-          dispatch(props.actions.set(JSON.parse(resp)));
-          localStorage.setItem(props.title, resp);
-        } else {
+        /* auto sync */
+        if (signedIn && stacc_loaded && fileId != 0 && upload && !isUploading) {
+          dispatch(props.actions.setUpload(false));
           handleSync();
         }
-      } else {
-        // uploads the current list if user chooses to not apply the updated tasks => update the cloud instead of updating local
-        console.log("uploading current");
-        handleSync();
       }
-      checkAutoTrash(time); // performs autotrash
+      //equivalent to componentDidMount
+      // checks for a lot of initializations: if signedIn, if the required task's fileId is present and whether it has already been synced/updated with the 'cloud', if satisfied then it checks the cloud for updates
+      if (signedIn && stacc_loaded && !stacc_synced && fileId != 0) {
+        dispatch(changeStaccSyncStat({ list: props.title, value: 1 })); // set the sync status for this list of tasks as done
+        //console.log("Only once: " + props.title);
+        var resp = await getFileContent(accessToken, fileId);
+        //console.log(resp);
+        var c_time = JSON.parse(resp).time;
+        //console.log(c_time, time, c_time > time);
+        if (c_time > time) {
+          // checks which one of the lists are more up-to-date
+          var x = window.confirm(
+            "There are newer " +
+              props.title +
+              " tasks available, replace current ones?"
+          );
+          if (x) {
+            dispatch(props.actions.set(JSON.parse(resp)));
+            localStorage.setItem(props.title, resp);
+          } else {
+            handleSync();
+          }
+        } else {
+          // uploads the current list if user chooses to not apply the updated tasks => update the cloud instead of updating local
+          console.log("uploading current");
+          handleSync();
+        }
+        checkAutoTrash(time); // performs autotrash
+      }
     }
+    lambda();
   });
 
   function checkAutoTrash(time) {
@@ -386,8 +389,9 @@ function Stacc(props) {
             />
           </div>
         ))}
-        {checked.map((post) => (
+        {checked.map((post, index) => (
           <div
+            key={index}
             style={
               active != "ongoing" ? { display: "unset" } : { display: "none" }
             }

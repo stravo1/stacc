@@ -11,7 +11,7 @@ function TaskModal(props) {
     <>
       <Modal
         dialogClassName={props.task.color + "Modal"}
-        full
+        size="full"
         open={props.open}
         onClose={handleClose}
       >

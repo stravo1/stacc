@@ -7,7 +7,7 @@ const initialState = (name) => {
         desc: "Sample Description",
         progress: 1 / 2,
         tags: ["basic"],
-        subtasks: { "Sample Subtask 1": 1, "Sample Subtask 2": 0 },
+        subtasks: { "Sample Subtask 1": true, "Sample Subtask 2": false },
         color: "green",
         id: 108,
       },

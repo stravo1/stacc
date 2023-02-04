@@ -1,14 +1,10 @@
-/* eslint-disable */
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 
 import "./index.less";
 import App from "./App";
 import Stacc from "./routes/Stacc";
 import Settings from "./routes/Settings";
-
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import reportWebVitals from "./reportWebVitals";
 
 import { CustomProvider } from "rsuite";
 
@@ -28,8 +24,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 var CLIENT_ID =
   "25256502274-6b15ibif1usnm9rtbi4blennjrvrl5lm.apps.googleusercontent.com";
 
-
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={CLIENT_ID}>
     <React.StrictMode>
       <BrowserRouter>
@@ -73,16 +68,4 @@ ReactDOM.render(
     </React.StrictMode>
   </GoogleOAuthProvider>,
 
-  document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.register();
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
-/* eslint-enable */

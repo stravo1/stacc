@@ -22,7 +22,9 @@ function ListMember(props) {
     Object.assign(task_copy, props.task); // actual values are immutable
     Object.assign(subtasks_copy, task_copy.subtasks); // actual values are immutable
     //console.log(task_copy.subtasks, Object.isFrozen(temp2))
-    Object.keys(subtasks_copy).map((subtask) => (subtasks_copy[subtask] = arg));
+    Object.keys(subtasks_copy).map(
+      (subtask) => (subtasks_copy[subtask] = arg == 0 ? false : true)
+    );
     task_copy.subtasks = subtasks_copy;
 
     task_copy["progress"] = arg; //bodge1

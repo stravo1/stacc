@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Toggle } from "rsuite";
-import { gapi } from "gapi-script";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSelector, useDispatch } from "react-redux";

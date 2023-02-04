@@ -180,7 +180,7 @@ function App() {
         </Content>
         <SideNav open={open} setOpen={(bool) => setOpen(bool)} />
       </Container>
-      <Modal size="small" open={modalOpen} onClose={handleClose}>
+      <Modal size="sm" open={modalOpen} onClose={handleClose}>
         <Modal.Header>
           <Modal.Title>Sync</Modal.Title>
         </Modal.Header>
